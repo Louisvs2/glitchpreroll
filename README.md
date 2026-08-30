@@ -7,6 +7,17 @@ sprunghaft umherspringenden Maske.
 
 Autor: Louis Reinecke
 
+## Inhalt
+
+| Datei | Inhalt |
+|-------|--------|
+| `GlitchPrerollPanel.jsx` | Das Script — dockbares Panel plus Glitch-Logik |
+| `GlitchPrerollPanel.pdf` | Dreiseitige Kurzdokumentation zum Ausdrucken |
+| `README.md` | Diese Datei |
+
+Alles als ZIP: auf GitHub **Code → Download ZIP**, oder direkt
+`https://github.com/Louisvs2/glitchpreroll/archive/refs/heads/claude/github-datei-readme-12dw44.zip`
+
 ---
 
 ## Installation
