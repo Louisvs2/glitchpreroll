@@ -12,7 +12,7 @@ Autor: Louis Reinecke
 | Datei | Inhalt |
 |-------|--------|
 | `GlitchPrerollPanel.jsx` | Das Script — dockbares Panel plus Glitch-Logik |
-| `GlitchPrerollPanel.pdf` | Dreiseitige Kurzdokumentation zum Ausdrucken |
+| `GlitchPrerollPanel.pdf` | Anleitung für Endnutzer — Einrichten, Regler, Ausgangswerte, Fehlermeldungen. Zum Weitergeben und Ausdrucken. |
 | `README.md` | Diese Datei |
 
 Alles als ZIP: auf GitHub **Code → Download ZIP**, oder direkt
