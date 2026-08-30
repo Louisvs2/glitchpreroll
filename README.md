@@ -100,21 +100,25 @@ Da jeder Aufruf mit `Math.random()` arbeitet, sieht jedes Ergebnis anders aus.
 
 ## UI-Aufbau
 
-Das Panel baut sein Dark-Theme selbst, weil ScriptUI auf macOS Hintergrund-
-farben nur auf `group`-Elementen zuverlässig respektiert:
+Das Panel baut sein Theme selbst, weil ScriptUI auf macOS Hintergrundfarben nur
+auf `group`-Elementen zuverlässig respektiert. Gestaltung: schwarz auf weiß,
+Orange nur als Akzent (louisreinecke.de).
 
-* `bg()` / `fg()` – setzen Brush bzw. Pen eines Controls.
-* `dot()` – kleiner farbiger Punkt, gezeichnet per `onDraw`.
-* `card()` – Container-Group im Kartenlook (`#1C1D28`).
-* `sectionTitle()` – Punkt + Überschrift + farbige Trennlinie.
-* `sliderRow()` – Label, Slider und mitlaufender Wert-Text mit Einheit.
-* Der Button ist ein Leaf-Control und wird komplett in `onDraw` gezeichnet
-  (Orange-Fläche, Shimmer oben, dunkler Rand unten, zentrierter Text).
+* `bg()` / `fg()` / `font()` – setzen Brush, Pen bzw. Schrift eines Controls.
+* `rule()` – dünne 1-px-Trennlinie, gezeichnet per `onDraw`.
+* `card()` – rahmenlose Container-Group für einen Abschnitt.
+* `sectionTitle()` – fette Versal-Überschrift + schwarze Trennlinie.
+* `sliderRow()` – Versal-Label (grau), Slider und mitlaufender Wert-Text.
+* Der Button ist ein Leaf-Control und wird in `onDraw` als flache orange
+  Fläche mit weißer Versalschrift gezeichnet.
+* Fußzeile: Trennlinie und rechtsbündig `BY LOUIS REINECKE` in Grau, 10 px.
 * `buildUI()` erkennt über `thisObj instanceof Panel`, ob es als dockbares
   Panel oder als schwebende Palette läuft.
 
-Farbpalette: `#111118` (Hintergrund), `#1C1D28` (Karten), `#F0750A` (Orange),
-`#4FB8F5` (Blau), `#7B5BE8` (Violett), `#C85AC8` (Pink).
+Farbpalette: `#FFFFFF` (Hintergrund), `#000000` (Schrift und Linien),
+`#FF3B00` (Akzent/Primärbutton), `#8A8A8A` (Nebentext).
+Typografie: ausschließlich die Systemschrift über
+`ScriptUI.newFont("", ScriptUI.FontStyle.REGULAR|BOLD, size)`.
 
 ---
 

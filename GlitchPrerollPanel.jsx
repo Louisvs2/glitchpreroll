@@ -16,16 +16,27 @@
 
     // ── Farben  (R,G,B,A  je 0–1) ─────────────────────────────────────────────
     var C = {
-        bg:     [0.067, 0.067, 0.094, 1],   // #111118
-        card:   [0.110, 0.114, 0.157, 1],   // #1C1D28
-        orange: [0.941, 0.459, 0.039, 1],   // #F0750A
-        blue:   [0.310, 0.722, 0.961, 1],   // #4FB8F5
-        purple: [0.482, 0.357, 0.910, 1],   // #7B5BE8
-        pink:   [0.784, 0.353, 0.784, 1],   // #C85AC8
-        white:  [1.000, 1.000, 1.000, 1],
-        hi:     [0.918, 0.925, 0.957, 1],   // #EAEcF4
-        mid:    [0.557, 0.569, 0.651, 1],   // #8E91A6
-        lo:     [0.329, 0.337, 0.408, 1],   // #545568
+        bg:     [1.000, 1.000, 1.000, 1],   // #FFFFFF
+        card:   [1.000, 1.000, 1.000, 1],   // #FFFFFF
+        orange: [1.000, 0.231, 0.000, 1],   // #FF3B00
+        blue:   [0.000, 0.000, 0.000, 1],   // #000000
+        purple: [0.000, 0.000, 0.000, 1],   // #000000
+        pink:   [0.000, 0.000, 0.000, 1],   // #000000
+        white:  [1.000, 1.000, 1.000, 1],   // #FFFFFF
+        hi:     [0.000, 0.000, 0.000, 1],   // #000000
+        mid:    [0.541, 0.541, 0.541, 1],   // #8A8A8A
+        lo:     [0.541, 0.541, 0.541, 1],   // #8A8A8A
+        black:  [0.000, 0.000, 0.000, 1],   // #000000
+    };
+
+    // ── Typografie  (eine Familie: Systemschrift) ─────────────────────────────
+    var F = {
+        title:   ScriptUI.newFont("", ScriptUI.FontStyle.BOLD,    18),
+        section: ScriptUI.newFont("", ScriptUI.FontStyle.BOLD,    11),
+        label:   ScriptUI.newFont("", ScriptUI.FontStyle.REGULAR, 11),
+        value:   ScriptUI.newFont("", ScriptUI.FontStyle.REGULAR, 11),
+        button:  ScriptUI.newFont("", ScriptUI.FontStyle.BOLD,    12),
+        small:   ScriptUI.newFont("", ScriptUI.FontStyle.REGULAR, 10),
     };
 
     // ── Farb-Helfer ───────────────────────────────────────────────────────────
@@ -37,17 +48,21 @@
         el.graphics.foregroundColor =
             el.graphics.newPen(el.graphics.PenType.SOLID_COLOR, col, 1);
     }
+    function font(el, f) {
+        el.graphics.font = f;
+    }
 
-    // ── Kleiner farbiger Dot (Leaf – kein Kind) ───────────────────────────────
-    function dot(parent, col) {
-        var d = parent.add("group");
-        d.preferredSize = [9, 9];
-        d.alignment     = ["left", "center"];
-        d.onDraw = function () {
-            var g = this.graphics;
-            g.newPath(); g.rectPath(1, 1, 7, 7);
+    // ── Dünne schwarze Trennlinie (1 px) ──────────────────────────────────────
+    function rule(parent, col) {
+        var sep = parent.add("group");
+        sep.alignment            = ["fill", "top"];
+        sep.preferredSize.height = 1;
+        sep.onDraw = function () {
+            var g = this.graphics, W = this.size[0];
+            g.newPath(); g.rectPath(0, 0, W, 1);
             g.fillPath(g.newBrush(g.BrushType.SOLID_COLOR, col));
         };
+        return sep;
     }
 
     // ── Karte (group, KEIN panel → respektiert bg auf macOS) ─────────────────
@@ -56,8 +71,8 @@
         c.orientation   = "column";
         c.alignChildren = ["fill", "top"];
         c.alignment     = ["fill", "top"];
-        c.spacing       = 5;
-        c.margins       = [10, 10, 10, 10];
+        c.spacing       = 8;
+        c.margins       = [0, 4, 0, 4];
         bg(c, C.card);
         return c;
     }
@@ -68,30 +83,22 @@
         row.orientation   = "row";
         row.alignChildren = ["left", "center"];
         row.alignment     = ["fill", "top"];
-        row.spacing       = 7;
-        row.margins       = [0, 0, 0, 4];
+        row.spacing       = 12;
+        row.margins       = [0, 0, 0, 6];
         bg(row, C.card);
-
-        dot(row, col);
 
         var lbl = row.add("statictext", undefined, title);
         lbl.alignment = ["fill", "center"];
-        fg(lbl, C.white);
+        font(lbl, F.section);
+        fg(lbl, C.black);
 
         // dünne Linie
-        var sep = parent.add("group");
-        sep.alignment       = ["fill", "top"];
-        sep.preferredSize.height = 1;
-        sep.onDraw = function () {
-            var g = this.graphics, W = this.size[0];
-            g.newPath(); g.rectPath(0, 0, W, 1);
-            g.fillPath(g.newBrush(g.BrushType.SOLID_COLOR, col));
-        };
+        rule(parent, col);
 
         // Abstand nach Linie
         var pad = parent.add("group");
         pad.alignment = ["fill", "top"];
-        pad.preferredSize.height = 4;
+        pad.preferredSize.height = 6;
         bg(pad, C.card);
     }
 
@@ -101,16 +108,15 @@
         row.orientation   = "row";
         row.alignChildren = ["left", "center"];
         row.alignment     = ["fill", "top"];
-        row.spacing       = 6;
-        row.margins       = [0, 1, 0, 1];
+        row.spacing       = 12;
+        row.margins       = [0, 2, 0, 2];
         bg(row, C.card);
 
-        dot(row, col);
-
         var lbl = row.add("statictext", undefined, label);
-        lbl.preferredSize.width = 148;
+        lbl.preferredSize.width = 168;
         lbl.alignment = ["left", "center"];
-        fg(lbl, C.hi);
+        font(lbl, F.label);
+        fg(lbl, C.mid);
 
         var sl = row.add("slider", undefined, val, lo, hi);
         sl.alignment = ["fill", "center"];   // ← füllt verfügbaren Platz
@@ -118,6 +124,7 @@
         var vl = row.add("statictext", undefined, val + unit);
         vl.preferredSize.width = 36;
         vl.alignment = ["right", "center"];
+        font(vl, F.value);
         fg(vl, col);
 
         sl.onChanging = function () { vl.text = Math.round(sl.value) + unit; };
@@ -133,8 +140,8 @@
 
         win.orientation   = "column";
         win.alignChildren = ["fill", "top"];
-        win.spacing       = 8;
-        win.margins       = 10;
+        win.spacing       = 12;
+        win.margins       = 16;
         bg(win, C.bg);
 
         // ── Header ────────────────────────────────────────────────────────────
@@ -142,32 +149,34 @@
         hdrRow.orientation   = "row";
         hdrRow.alignChildren = ["left", "center"];
         hdrRow.alignment     = ["fill", "top"];
-        hdrRow.spacing       = 8;
-        hdrRow.margins       = [2, 4, 2, 6];
+        hdrRow.spacing       = 12;
+        hdrRow.margins       = [0, 0, 0, 6];
         bg(hdrRow, C.bg);
 
-        dot(hdrRow, C.orange);
-
-        var title = hdrRow.add("statictext", undefined, "Glitch Preroll");
+        var title = hdrRow.add("statictext", undefined, "GLITCH PREROLL");
         title.alignment = ["left", "center"];
-        fg(title, C.white);
+        font(title, F.title);
+        fg(title, C.black);
 
         var sub = hdrRow.add("statictext", undefined, "AE 2026");
         sub.alignment = ["right", "center"];
-        fg(sub, C.lo);
+        font(sub, F.small);
+        fg(sub, C.mid);
+
+        rule(win, C.black);
 
         // ── Karte: Layer ──────────────────────────────────────────────────────
         var cL = card(win);
-        sectionTitle(cL, "LAYER SETTINGS", C.purple);
+        sectionTitle(cL, "LAYER SETTINGS", C.black);
 
-        var ctrlNum = sliderRow(cL, "Number of Layers", DEF_NUM, 1, 5, "", C.orange);
+        var ctrlNum = sliderRow(cL, "NUMBER OF LAYERS", DEF_NUM, 1, 5, "", C.orange);
 
-        var sp = cL.add("group"); sp.preferredSize.height = 4; sp.alignment = ["fill","top"]; bg(sp, C.card);
+        var sp = cL.add("group"); sp.preferredSize.height = 6; sp.alignment = ["fill","top"]; bg(sp, C.card);
 
-        var layerColors  = [C.orange, C.pink, C.purple, C.blue, C.blue];
+        var layerColors  = [C.orange, C.orange, C.orange, C.orange, C.orange];
         var frameRows    = [], frameSliders = [], frameLabels = [];
         for (var fi = 0; fi < 5; fi++) {
-            var fr = sliderRow(cL, "Layer " + (fi + 1) + "  Frames",
+            var fr = sliderRow(cL, "LAYER " + (fi + 1) + "  FRAMES",
                                DEF_FR[fi], 1, 60, " f", layerColors[fi]);
             frameRows.push(fr.row);
             frameSliders.push(fr.slider);
@@ -176,16 +185,17 @@
 
         // ── Karte: Masken ─────────────────────────────────────────────────────
         var cM = card(win);
-        sectionTitle(cM, "MASK SETTINGS", C.blue);
+        sectionTitle(cM, "MASK SETTINGS", C.black);
 
-        var ctrlDist = sliderRow(cM, "Jump Distance",       DEF_DIST, 1, 40, " %", C.orange);
-        var ctrlFreq = sliderRow(cM, "Jump Every N Frames", DEF_FREQ, 1, 15, " f", C.pink);
-        var ctrlSize = sliderRow(cM, "Mask Size",           DEF_SIZE, 1, 60, " %", C.purple);
+        var ctrlDist = sliderRow(cM, "JUMP DISTANCE",       DEF_DIST, 1, 40, " %", C.black);
+        var ctrlFreq = sliderRow(cM, "JUMP EVERY N FRAMES", DEF_FREQ, 1, 15, " f", C.black);
+        var ctrlSize = sliderRow(cM, "MASK SIZE",           DEF_SIZE, 1, 60, " %", C.black);
 
         // ── Button (Leaf → onDraw funktioniert) ───────────────────────────────
         var btn = win.add("button", undefined, "");
         btn.alignment       = ["fill", "top"];
         btn.preferredSize.height = 34;
+        font(btn, F.button);
 
         btn.onDraw = function () {
             var g = this.graphics, W = this.size[0], H = this.size[1];
@@ -193,15 +203,7 @@
             g.newPath(); g.rectPath(0, 0, W, H);
             g.fillPath(g.newBrush(g.BrushType.SOLID_COLOR, C.orange));
 
-            // Shimmer oben
-            g.newPath(); g.rectPath(1, 1, W - 2, Math.floor(H * 0.42));
-            g.fillPath(g.newBrush(g.BrushType.SOLID_COLOR, [0.980, 0.620, 0.200, 1]));
-
-            // Rim unten
-            g.newPath(); g.rectPath(0, H - 2, W, 2);
-            g.fillPath(g.newBrush(g.BrushType.SOLID_COLOR, [0.760, 0.310, 0.005, 1]));
-
-            var txt = "Create Glitch Preroll";
+            var txt = "CREATE GLITCH PREROLL";
             var pen = g.newPen(g.PenType.SOLID_COLOR, C.white, 1);
             var ms  = g.measureString(txt, g.font, W);
             g.drawString(txt, pen, (W - ms[0]) / 2, (H - ms[1]) / 2);
@@ -231,6 +233,21 @@
                 Math.round(ctrlSize.slider.value) / 100
             );
         };
+
+        // ── Branding ──────────────────────────────────────────────────────────
+        rule(win, C.black);
+
+        var footRow = win.add("group");
+        footRow.orientation   = "row";
+        footRow.alignChildren = ["right", "center"];
+        footRow.alignment     = ["fill", "top"];
+        footRow.margins       = [0, 2, 0, 0];
+        bg(footRow, C.bg);
+
+        var credit = footRow.add("statictext", undefined, "BY LOUIS REINECKE");
+        credit.alignment = ["right", "center"];
+        font(credit, F.small);
+        fg(credit, C.mid);
 
         // ── Resize ────────────────────────────────────────────────────────────
         win.onResize = win.onResizeContent = function () {
